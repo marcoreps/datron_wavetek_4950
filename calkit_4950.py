@@ -14,11 +14,11 @@ from openpyxl.styles import PatternFill, Border, Side, Alignment
 from openpyxl.styles import colors, Font, Fill, NamedStyle
 
 rm = visa.ResourceManager()
-#F5700EP = rm.open_resource('GPIB0::1::INSTR') # Ethernet GPIB Dongle
-#dmm = rm.open_resource('GPIB0::9::INSTR') # Ethernet GPIB Dongle
+F5700EP = rm.open_resource("TCPIP::192.168.0.88::GPIB0,1") # Ethernet GPIB Dongle
+dmm = rm.open_resource("TCPIP::192.168.0.88::GPIB0,9") # Ethernet GPIB Dongle
 
-F5700EP = rm.open_resource('GPIB0::1::INSTR') # Local GPIB Dongle
-#dmm = rm.open_resource('GPIB0::9::INSTR') # Ethernet GPIB Dongle
+#F5700EP = rm.open_resource('GPIB0::1::INSTR') # Local GPIB Dongle
+##dmm = rm.open_resource('GPIB0::9::INSTR') # Local GPIB Dongle
 
 ########## DMM and MFC ##########   
 F5700EP.write("*RST")
@@ -34,8 +34,8 @@ F5700EP.write("OPER")
 time.sleep(5)
 print("SRC configured")
 
-F5700EP.close()
-dmm = rm.open_resource('GPIB0::9::INSTR')
+#F5700EP.close()
+#dmm = rm.open_resource('GPIB0::9::INSTR')
 dmm.timeout = None
 dmm.write("*RST")
 time.sleep(2)
@@ -124,8 +124,8 @@ ws['E24'] = '' #Unc
 ws['F24'] = '' #Calibration Date
 ws['H24'] = '' #Due Date
 
-dmm.close()
-F5700EP = rm.open_resource('GPIB0::1::INSTR')
+#dmm.close()
+#F5700EP = rm.open_resource('GPIB0::1::INSTR')
 
 ########## info of MFC ##########
 F5700EP.write("CAL_DATE? CAL")
@@ -209,12 +209,12 @@ print("Initialization time elapsed:%.2f minutes"
 
 time_start = time.time()
 
-F5700EP.close()
+#F5700EP.close()
 
 
 ########## DCV PERFORMANCE TEST ##########
 ### SHORT Input ###
-dmm = rm.open_resource('GPIB0::9::INSTR')
+#dmm = rm.open_resource('GPIB0::9::INSTR')
 dmm.timeout = None
 dmm.write("*TRG;GET;RDG?")
 volt = float(dmm.read())
@@ -254,16 +254,16 @@ for ix in range (0,5):
     ws['C' + str(45+ix)] = median*1e6
     ws['J' + str(45+ix)] = sdev*1e6
     
-    dmm.close()
-    F5700EP = rm.open_resource('GPIB0::1::INSTR')
+    #dmm.close()
+    #F5700EP = rm.open_resource('GPIB0::1::INSTR')
     
     F5700EP.write("UNCERT?")
     unc = F5700EP.read()
     cutstr = unc.split(",")
     ws['D' + str(45+ix)] = float(cutstr[0])
     
-    F5700EP.close()
-    dmm = rm.open_resource('GPIB0::9::INSTR')
+    #F5700EP.close()
+    #dmm = rm.open_resource('GPIB0::9::INSTR')
     dmm.timeout = None    
     dmm.write("DEVTN? ABSOLUTE")
     Quality = float(dmm.read())
@@ -281,10 +281,10 @@ DCV_list = [0.01,0.02,0.05,0.10,-0.01,-0.02,-0.05,-0.10,
             -100.0,-200.0,-500.0,-1000.0,100.0,200.0,500.0,1000.0]
 
 dmm.write("DCV 1000,PCENT_100,LCL_GUARD")    
-dmm.close()
+#dmm.close()
 for ix in range (0,42):
     
-    dmm = rm.open_resource('GPIB0::9::INSTR')
+    #dmm = rm.open_resource('GPIB0::9::INSTR')
     dmm.timeout = None    
     array = []
     sdev = 0.0
@@ -310,14 +310,14 @@ for ix in range (0,42):
     else:
         dmm.write("DCV 1000,PCENT_100,LCL_GUARD")
         
-    dmm.close()
-    F5700EP = rm.open_resource('GPIB0::1::INSTR')
+    #dmm.close()
+    #F5700EP = rm.open_resource('GPIB0::1::INSTR')
         
     F5700EP.write("OUT %.7f" % vout)
     F5700EP.write("OPER")
     
-    F5700EP.close()
-    dmm = rm.open_resource('GPIB0::9::INSTR')
+    #F5700EP.close()
+    #dmm = rm.open_resource('GPIB0::9::INSTR')
     dmm.timeout = None    
     if ix == 36 or ix == 37 or ix >= 40:
         dmm.write("TRIG_SRCE INT")
@@ -334,8 +334,8 @@ for ix in range (0,42):
     ws['C' + str(51+ix)] = median
     ws['J' + str(51+ix)] = sdev*1e6/median
     
-    dmm.close()
-    F5700EP = rm.open_resource('GPIB0::1::INSTR')
+    #dmm.close()
+    #F5700EP = rm.open_resource('GPIB0::1::INSTR')
     
     F5700EP.write("UNCERT?")
     unc = F5700EP.read()
@@ -345,17 +345,17 @@ for ix in range (0,42):
     else:
         ws['D' + str(51+ix)] = float(cutstr[0])
         
-    F5700EP.close()
-    dmm = rm.open_resource('GPIB0::9::INSTR')
+    #F5700EP.close()
+    #dmm = rm.open_resource('GPIB0::9::INSTR')
     dmm.timeout = None        
     dmm.write("DEVTN? READING")
     Quality = float(dmm.read())
     ws['K' + str(51+ix)] = Quality    
     print("Source = %.3f V, dmm = %.8f V,  sdev = %.3f ppm, Quality(DMM) =  %s" % (vout, median, sdev*1e6/median, Quality))
     print(array)
-    dmm.close()
+    #dmm.close()
     
-F5700EP = rm.open_resource('GPIB0::1::INSTR')
+#F5700EP = rm.open_resource('GPIB0::1::INSTR')
     
 F5700EP.write("OUT 250 V, 0 Hz")
 time.sleep(5)
@@ -367,12 +367,12 @@ wb.save('test_4950.xlsx')
 print("DCV time elapsed:%.2f minutes"
       % ((time.time() - time_start)/60))
 time_start = time.time()
-F5700EP.close()
+#F5700EP.close()
 
         
 ########## OHM PERFORMANCE TEST ##########
 print("OHM PERFORMANCE TEST")
-F5700EP = rm.open_resource('GPIB0::1::INSTR')
+#F5700EP = rm.open_resource('GPIB0::1::INSTR')
 MFC_OHM_list = ["1 OHM","1.9 OHM","10 OHM","19 OHM","100 OHM","190 OHM","1 KOHM","1.9 KOHM","10 KOHM",
                 "19 KOHM","100 KOHM","190 KOHM","1 MOHM","1.9 MOHM","10 MOHM","19 MOHM","100 MOHM"]
 
@@ -381,17 +381,17 @@ F5700EP.write("EXTSENSE ON")
 F5700EP.write("OPER")
 time.sleep(10)
 
-F5700EP.close()
-dmm = rm.open_resource('GPIB0::9::INSTR')
+#F5700EP.close()
+#dmm = rm.open_resource('GPIB0::9::INSTR')
 dmm.timeout = None
 dmm.write("OHMS 10,PCENT_0,FWR,LCL_GUARD")
 dmm.write("ZERO?")
 time.sleep(100)
 
-dmm.close()
+#dmm.close()
 
 for ix in range (0,17):
-    dmm = rm.open_resource('GPIB0::9::INSTR')
+    #dmm = rm.open_resource('GPIB0::9::INSTR')
     dmm.timeout = None    
     array = []
     sdev = 0.0
@@ -450,22 +450,22 @@ for ix in range (0,17):
         print("DMM OHMS FWR Range: 10 MOHM, PCENT_190")
     elif ix == 16:
         dmm.write("OHMS 100000000,PCENT_100,TWR,LCL_GUARD")
-        dmm.close()
-        F5700EP = rm.open_resource('GPIB0::1::INSTR')
+        #dmm.close()
+        #F5700EP = rm.open_resource('GPIB0::1::INSTR')
         F5700EP.write("EXTSENSE OFF")
-        F5700EP.close()
-        dmm = rm.open_resource('GPIB0::9::INSTR')
+        #F5700EP.close()
+        #dmm = rm.open_resource('GPIB0::9::INSTR')
         dmm.timeout = None    
         print("DMM OHMS TWR Range: 100 MOHM, PCENT_100") 
         
-    dmm.close()
-    F5700EP = rm.open_resource('GPIB0::1::INSTR')
+    #dmm.close()
+    #F5700EP = rm.open_resource('GPIB0::1::INSTR')
         
     F5700EP.write("OUT %s" % res) 
     F5700EP.write("OPER")
     
-    F5700EP.close()
-    dmm = rm.open_resource('GPIB0::9::INSTR')
+    #F5700EP.close()
+    #dmm = rm.open_resource('GPIB0::9::INSTR')
     dmm.timeout = None    
     if ix < 13 and ix >= 6:
         time.sleep(60)
@@ -480,8 +480,8 @@ for ix in range (0,17):
     sdev = np.std(array[1:],ddof = 1)
     median = np.median(array[1:])
     
-    dmm.close()
-    F5700EP = rm.open_resource('GPIB0::1::INSTR')
+    #dmm.close()
+    #F5700EP = rm.open_resource('GPIB0::1::INSTR')
     
     F5700EP.write("OUT?")
     res = F5700EP.read()
@@ -495,33 +495,33 @@ for ix in range (0,17):
     cutstr = unc.split(",")
     ws['D' + str(105+ix)] = float(cutstr[0])
     
-    F5700EP.close()
-    dmm = rm.open_resource('GPIB0::9::INSTR')
+    #F5700EP.close()
+    #dmm = rm.open_resource('GPIB0::9::INSTR')
     dmm.timeout = None    
     dmm.write("DEVTN? READING")
     Quality = float(dmm.read())
     ws['K' + str(105+ix)] = Quality    
     print("Source = %s, dmm = %.8f ohm,  sdev = %.3f ppm, Quality(DMM) =  %s" % (res, median, sdev*1e6/median, Quality))
     print(array)
-    dmm.close()
+    #dmm.close()
 wb.save('test_4950.xlsx')
 
-dmm = rm.open_resource('GPIB0::9::INSTR')
+#dmm = rm.open_resource('GPIB0::9::INSTR')
 dmm.timeout = None    
 dmm.write("OHMS 10,PCENT_0,FWR,LCL_GUARD")
 ### OHM zero 4w ###             
 
-dmm.close()
-F5700EP = rm.open_resource('GPIB0::1::INSTR')
+#dmm.close()
+#F5700EP = rm.open_resource('GPIB0::1::INSTR')
                                                          
 F5700EP.write("OUT 0 OHM")
 F5700EP.write("EXTSENSE ON")
 F5700EP.write("OPER")
-F5700EP.close()
+#F5700EP.close()
 time.sleep(10)
 
 for ix in range (0,8):
-    dmm = rm.open_resource('GPIB0::9::INSTR')
+    #dmm = rm.open_resource('GPIB0::9::INSTR')
     dmm.timeout = None    
     array = []
     sdev = 0.0
@@ -561,13 +561,13 @@ for ix in range (0,8):
     median = np.median(array[1:])
     ws['C' + str(130+ix)] = median
     ws['J' + str(130+ix)] = sdev
-    dmm.close()
-    F5700EP = rm.open_resource('GPIB0::1::INSTR')
+    #dmm.close()
+    #F5700EP = rm.open_resource('GPIB0::1::INSTR')
     F5700EP.write("UNCERT?")
     unc = F5700EP.read()
     
-    F5700EP.close()
-    dmm = rm.open_resource('GPIB0::9::INSTR')
+    #F5700EP.close()
+    #dmm = rm.open_resource('GPIB0::9::INSTR')
     dmm.timeout = None 
     
     cutstr = unc.split(",")
@@ -577,23 +577,23 @@ for ix in range (0,8):
     ws['K' + str(130+ix)] = Quality    
     print("Source = %s, dmm = %.8f ohm,  sdev = %.8f ohm,  Quality(DMM) = %.8f ohm " % ("0 ohm", median, sdev, Quality))
     print(array)
-    dmm.close()
+    #dmm.close()
 wb.save('test_4950.xlsx')
 
 
-dmm = rm.open_resource('GPIB0::9::INSTR')
+#dmm = rm.open_resource('GPIB0::9::INSTR')
 dmm.timeout = None 
 dmm.write("OHMS 10,PCENT_0,TWR,LCL_GUARD")
-dmm.close()
-F5700EP = rm.open_resource('GPIB0::1::INSTR')
+#dmm.close()
+#F5700EP = rm.open_resource('GPIB0::1::INSTR')
 ### OHM zero 2w ###
 F5700EP.write("OUT 0 OHM")
 F5700EP.write("EXTSENSE OFF")
 F5700EP.write("OPER")
-F5700EP.close()
+#F5700EP.close()
 time.sleep(10)
 for ix in range (0,8):
-    dmm = rm.open_resource('GPIB0::9::INSTR')
+    #dmm = rm.open_resource('GPIB0::9::INSTR')
     dmm.timeout = None 
     array = []
     sdev = 0.0
@@ -636,16 +636,16 @@ for ix in range (0,8):
     ws['C' + str(146+ix)] = median
     ws['J' + str(146+ix)] = sdev
     
-    dmm.close()
-    F5700EP = rm.open_resource('GPIB0::1::INSTR')
+    #dmm.close()
+    #F5700EP = rm.open_resource('GPIB0::1::INSTR')
     
     F5700EP.write("UNCERT?")
     unc = F5700EP.read()
     cutstr = unc.split(",")
     ws['D' + str(146+ix)] = float(cutstr[0])
     
-    F5700EP.close()
-    dmm = rm.open_resource('GPIB0::9::INSTR')
+    #F5700EP.close()
+    #dmm = rm.open_resource('GPIB0::9::INSTR')
     dmm.timeout = None 
     
     dmm.write("DEVTN? ABSOLUTE")
@@ -653,9 +653,9 @@ for ix in range (0,8):
     ws['K' + str(146+ix)] = Quality    
     print("Source = %s, dmm = %.8f ohm,  sdev = %.8f ohm, Quality(DMM) = %.8f ohm " % ("0 ohm", median, sdev, Quality))
     print(array)
-    dmm.close()
+    #dmm.close()
 
-F5700EP = rm.open_resource('GPIB0::1::INSTR')
+#F5700EP = rm.open_resource('GPIB0::1::INSTR')
 F5700EP.write("EXTSENSE OFF")    
 ws['D373'] = float("%.2f" % ((time.time() - time_start)/60))
 wb.save('test_4950.xlsx')
@@ -666,7 +666,7 @@ time_start = time.time()
 F5700EP.write("OUT 0 V, 0 Hz")
 F5700EP.write("STBY")
 
-F5700EP.close()
+#F5700EP.close()
 
 
 #########################
@@ -684,19 +684,19 @@ print("ACV PERFORMANCE TEST")
 ACV_LIN_list = ["1 V,1 KHz","2 V, 1 KHz","5 V, 1 KHz","10 V, 1 KHz","12 V, 1 KHz","15 V, 1 KHz","19 V, 1 KHz"]
 ### AC VOLTAGE Linearity Checks ###
 
-dmm = rm.open_resource('GPIB0::9::INSTR')
+#dmm = rm.open_resource('GPIB0::9::INSTR')
 dmm.timeout = None 
 dmm.write("ACV 10,FREQ_1k,PCENT_100,FWR,LCL_GUARD")
-dmm.close()
-F5700EP = rm.open_resource('GPIB0::1::INSTR')
+#dmm.close()
+#F5700EP = rm.open_resource('GPIB0::1::INSTR')
 
 F5700EP.write("OUT 1 V, 1 KHz")
 F5700EP.write("OPER")
 time.sleep(180)# thermal sensor warm up
-F5700EP.close()
+#F5700EP.close()
 
 for ix in range (0,7):
-    F5700EP = rm.open_resource('GPIB0::1::INSTR')
+    #F5700EP = rm.open_resource('GPIB0::1::INSTR')
     array = []
     sdev = 0.0
     median = 0.0
@@ -706,8 +706,8 @@ for ix in range (0,7):
     F5700EP.write("OUT %s" % acv)
     F5700EP.write("OPER")
     
-    F5700EP.close()
-    dmm = rm.open_resource('GPIB0::9::INSTR')
+    #F5700EP.close()
+    #dmm = rm.open_resource('GPIB0::9::INSTR')
     dmm.timeout = None 
     
     time.sleep(60)
@@ -720,8 +720,8 @@ for ix in range (0,7):
     ws['C' + str(161+ix)] = median
     ws['J' + str(161+ix)] = sdev*1e6/median
     
-    dmm.close()
-    F5700EP = rm.open_resource('GPIB0::1::INSTR')
+    #dmm.close()
+    #F5700EP = rm.open_resource('GPIB0::1::INSTR')
     
     F5700EP.write("UNCERT?")
     unc = F5700EP.read()
@@ -731,8 +731,8 @@ for ix in range (0,7):
     else:
         ws['D' + str(161+ix)] = float(cutstr[0])
         
-    F5700EP.close()
-    dmm = rm.open_resource('GPIB0::9::INSTR')
+    #F5700EP.close()
+    #dmm = rm.open_resource('GPIB0::9::INSTR')
     dmm.timeout = None 
         
     dmm.write("DEVTN? READING")
@@ -740,9 +740,9 @@ for ix in range (0,7):
     ws['K' + str(161+ix)] = Quality    
     print("Source = %s , dmm = %.8f Vac,  sdev = %.3f ppm, Quality(DMM) =  %s" % (acv, median, sdev*1e6/median, Quality))
     print(array)
-    dmm.close()
+    #dmm.close()
     
-F5700EP = rm.open_resource('GPIB0::1::INSTR')
+#F5700EP = rm.open_resource('GPIB0::1::INSTR')
 F5700EP.write("STBY")
 wb.save('test_4950.xlsx')
 
@@ -763,13 +763,13 @@ ACV_list = ["0.001 V, 10 Hz","0.001 V, 20 Hz","0.001 V, 30 Hz","0.001 V, 40 Hz",
             "100 V, 100 KHz","100 V, 200 KHz","1000 V, 55 Hz","1000 V, 300 Hz","700 V, 1 KHz"]
 
 
-F5700EP.close()
-dmm = rm.open_resource('GPIB0::9::INSTR')
+#F5700EP.close()
+#dmm = rm.open_resource('GPIB0::9::INSTR')
 dmm.timeout = None 
 
 dmm.write("ACV 10,FREQ_1k,PCENT_100,FWR,LCL_GUARD")
 for ix in range (0,112):
-    dmm = rm.open_resource('GPIB0::9::INSTR')
+    #dmm = rm.open_resource('GPIB0::9::INSTR')
     dmm.timeout = None 
     array = []
     sdev = 0.0
@@ -791,8 +791,8 @@ for ix in range (0,112):
         dmm.write("ACV %s,FREQ_%sM,%s,FWR,LCL_GUARD" %(cutstr[0],cutstr[2],pcent))
     else:
         dmm.write("ACV 1000,FREQ_1k,PCENT_100,FWR,LCL_GUARD")
-    dmm.close()
-    F5700EP = rm.open_resource('GPIB0::1::INSTR')
+    #dmm.close()
+    #F5700EP = rm.open_resource('GPIB0::1::INSTR')
     
     F5700EP.write("FAULT?")
     fault = F5700EP.read()
@@ -804,8 +804,8 @@ for ix in range (0,112):
     
     F5700EP.write("OUT %s" % acv)
     F5700EP.write("OPER")
-    F5700EP.close()
-    dmm = rm.open_resource('GPIB0::9::INSTR')
+    #F5700EP.close()
+    #dmm = rm.open_resource('GPIB0::9::INSTR')
     dmm.timeout = None 
     if ix == 109:
         dmm.write("TRIG_SRCE INT")
@@ -821,8 +821,8 @@ for ix in range (0,112):
     median = np.median(array[1:])
     ws['C' + str(170+ix)] = median
     ws['J' + str(170+ix)] = sdev*1e6/median
-    dmm.close()
-    F5700EP = rm.open_resource('GPIB0::1::INSTR')
+    #dmm.close()
+    #F5700EP = rm.open_resource('GPIB0::1::INSTR')
     F5700EP.write("UNCERT?")
     unc = F5700EP.read()
     cutstr = unc.split(",")
@@ -830,18 +830,18 @@ for ix in range (0,112):
         ws['D' + str(170+ix)] = float(cutstr[0])*1e4
     else:
         ws['D' + str(170+ix)] = float(cutstr[0])
-    F5700EP.close()
-    dmm = rm.open_resource('GPIB0::9::INSTR')
+    #F5700EP.close()
+    #dmm = rm.open_resource('GPIB0::9::INSTR')
     dmm.timeout = None 
     dmm.write("DEVTN? READING")
     Quality = float(dmm.read())
     ws['K' + str(170+ix)] = Quality        
     print("Source = %s , dmm = %.8f Vac,  sdev = %.3f ppm, Quality(DMM) =  %s" % (acv, median, sdev*1e6/median, Quality))
     print(array)
-    dmm.close()
+    #dmm.close()
     
     
-F5700EP = rm.open_resource('GPIB0::1::INSTR') 
+#F5700EP = rm.open_resource('GPIB0::1::INSTR') 
 F5700EP.write("OUT 250 V, 1 KHz")
 time.sleep(5)
 F5700EP.write("OUT 0 V, 0 Hz")
@@ -874,17 +874,17 @@ DCI_list = ["1 uA","10 uA","50 uA","100 uA","-100 uA","-50 uA","-10 uA",
             "10 mA","50 mA","100 mA","-100 mA","-50 mA",
             "0.1 A","0.5 A","-0.5 A","-1 A","1 A"]
 
-F5700EP.close()
-dmm = rm.open_resource('GPIB0::9::INSTR')
+#F5700EP.close()
+#dmm = rm.open_resource('GPIB0::9::INSTR')
 dmm.timeout = None 
 dmm.write("DCI 1,PCENT_100,LCL_GUARD")
-dmm.close()
-F5700EP = rm.open_resource('GPIB0::1::INSTR')
+#dmm.close()
+#F5700EP = rm.open_resource('GPIB0::1::INSTR')
 F5700EP.write("OUT 0 uA, 0 Hz")
 F5700EP.write("CUR_POST AUX")
-F5700EP.close()
+#F5700EP.close()
 for ix in range (0,27):
-    dmm = rm.open_resource('GPIB0::9::INSTR')
+    #dmm = rm.open_resource('GPIB0::9::INSTR')
     dmm.timeout = None 
     array = []
     sdev = 0.0
@@ -909,12 +909,12 @@ for ix in range (0,27):
         print("DMM DCI Range: 1A")        
     else:
         dmm.write("DCI 1,PCENT_100,LCL_GUARD")
-    dmm.close()
-    F5700EP = rm.open_resource('GPIB0::1::INSTR')
+    #dmm.close()
+    #F5700EP = rm.open_resource('GPIB0::1::INSTR')
     F5700EP.write("OUT %s" % iout)
     F5700EP.write("OPER")
-    F5700EP.close()
-    dmm = rm.open_resource('GPIB0::9::INSTR')
+    #F5700EP.close()
+    #dmm = rm.open_resource('GPIB0::9::INSTR')
     dmm.timeout = None 
     if ix == 23:
         time.sleep(300)
@@ -930,12 +930,12 @@ for ix in range (0,27):
     median = np.median(array[1:])
     ws['C' + str(287+ix)] = median
     ws['J' + str(287+ix)] = sdev*1e6/median
-    dmm.close()
-    F5700EP = rm.open_resource('GPIB0::1::INSTR')
+    #dmm.close()
+    #F5700EP = rm.open_resource('GPIB0::1::INSTR')
     F5700EP.write("UNCERT?")
     unc = F5700EP.read()
-    F5700EP.close()
-    dmm = rm.open_resource('GPIB0::9::INSTR')
+    #F5700EP.close()
+    #dmm = rm.open_resource('GPIB0::9::INSTR')
     dmm.timeout = None 
     cutstr = unc.split(",")
     if str(cutstr[1]) == "A":
@@ -947,13 +947,13 @@ for ix in range (0,27):
     ws['K' + str(287+ix)] = Quality
     print("Source = %s, dmm = %.10f A,  sdev = %.3f ppm, Quality(DMM) = %s" % (iout, median, sdev*1e6/median, Quality))
     print(array)
-    dmm.close()
+    #dmm.close()
 wb.save('test_4950.xlsx')
 
-F5700EP = rm.open_resource('GPIB0::1::INSTR')
+#F5700EP = rm.open_resource('GPIB0::1::INSTR')
 F5700EP.write("OUT 0 uA, 0 Hz")
-F5700EP.close()
-dmm = rm.open_resource('GPIB0::9::INSTR')
+#F5700EP.close()
+#dmm = rm.open_resource('GPIB0::9::INSTR')
 dmm.timeout = None 
 
 ws['F373'] = float("%.2f" % ((time.time() - time_start)/60))
@@ -971,9 +971,9 @@ ACI_list = ["10 uA, 10 Hz","10 uA, 20 Hz","10 uA, 30 Hz","10 uA, 40 Hz","10 uA, 
             "1 A, 10 Hz","1 A, 20 Hz","1 A, 30 Hz","1 A, 40 Hz","1 A, 55 Hz","1 A, 300 Hz","1 A, 1 KHz","1 A, 5 KHz","1 A, 10 KHz"]
 
 dmm.write("ACI 1,FREQ_1k,LCL_GUARD")
-dmm.close()
+#dmm.close()
 for ix in range (0,54):
-    dmm = rm.open_resource('GPIB0::9::INSTR')
+    #dmm = rm.open_resource('GPIB0::9::INSTR')
     dmm.timeout = None 
     array = []
     sdev = 0.0
@@ -1006,12 +1006,12 @@ for ix in range (0,54):
         dmm.write("ACI %s,FREQ_%sk,LCL_GUARD" %(ACIrange,cutstr[2]))
     else:
         dmm.write("ACI 1,FREQ_1k,LCL_GUARD")        
-    dmm.close()
-    F5700EP = rm.open_resource('GPIB0::1::INSTR')
+    #dmm.close()
+    #F5700EP = rm.open_resource('GPIB0::1::INSTR')
     F5700EP.write("OUT %s" % iout)
     F5700EP.write("OPER")
-    F5700EP.close()
-    dmm = rm.open_resource('GPIB0::9::INSTR')
+    #F5700EP.close()
+    #dmm = rm.open_resource('GPIB0::9::INSTR')
     dmm.timeout = None 
     if ix == 45:
         dmm.write("TRIG_SRCE INT")
@@ -1027,12 +1027,12 @@ for ix in range (0,54):
     median = np.median(array[1:])
     ws['C' + str(317+ix)] = median
     ws['J' + str(317+ix)] = sdev*1e6/median
-    dmm.close()
-    F5700EP = rm.open_resource('GPIB0::1::INSTR')
+    #dmm.close()
+    #F5700EP = rm.open_resource('GPIB0::1::INSTR')
     F5700EP.write("UNCERT?")
     unc = F5700EP.read()
-    F5700EP.close()
-    dmm = rm.open_resource('GPIB0::9::INSTR')
+    #F5700EP.close()
+    #dmm = rm.open_resource('GPIB0::9::INSTR')
     dmm.timeout = None 
     cutstr = unc.split(",")
     if str(cutstr[1]) == "A":
@@ -1044,7 +1044,7 @@ for ix in range (0,54):
     ws['K' + str(317+ix)] = Quality
     print("Source = %s, dmm = %.10f A,  sdev = %.3f ppm, Quality(DMM) =  %s" % (iout, median, sdev*1e6/median, Quality)) 
     print(array)
-    dmm.close()
+    #dmm.close()
 
 ws['G373'] = float("%.2f" % ((time.time() - time_start)/60))
 wb.save('test_4950.xlsx')
@@ -1056,7 +1056,7 @@ print("ACI time elapsed:%.2f minutes"
 wb.save('test_4950.xlsx')
 
 #Reset the DMM and MFC####
-F5700EP = rm.open_resource('GPIB0::1::INSTR')
+#F5700EP = rm.open_resource('GPIB0::1::INSTR')
 F5700EP.write("OUT 0 V, 0 Hz")
 F5700EP.write("STBY")
 F5700EP.write("*RST")
@@ -1064,7 +1064,7 @@ F5700EP.write("*CLS")
 F5700EP.write("OUT 0 V, 0 Hz")     
 F5700EP.write("RANGELCK ON")
 F5700EP.close()
-dmm = rm.open_resource('GPIB0::9::INSTR')
+#dmm = rm.open_resource('GPIB0::9::INSTR')
 dmm.write("*RST")
 dmm.close()
 
