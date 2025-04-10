@@ -14,11 +14,11 @@ from openpyxl.styles import PatternFill, Border, Side, Alignment
 from openpyxl.styles import colors, Font, Fill, NamedStyle
 
 rm = visa.ResourceManager()
-F5700EP = rm.open_resource("TCPIP::192.168.0.88::GPIB0,1") # Ethernet GPIB Dongle
-dmm = rm.open_resource("TCPIP::192.168.0.88::GPIB0,9") # Ethernet GPIB Dongle
+#F5700EP = rm.open_resource("TCPIP::192.168.0.88::GPIB0,1") # Ethernet GPIB Dongle
+#dmm = rm.open_resource("TCPIP::192.168.0.88::GPIB0,9") # Ethernet GPIB Dongle
 
-#F5700EP = rm.open_resource('GPIB0::1::INSTR') # Local GPIB Dongle
-##dmm = rm.open_resource('GPIB0::9::INSTR') # Local GPIB Dongle
+F5700EP = rm.open_resource('GPIB0::1::INSTR') # Local GPIB Dongle
+dmm = rm.open_resource('GPIB0::10::INSTR') # Local GPIB Dongle
 
 ########## DMM and MFC ##########   
 F5700EP.write("*RST")
