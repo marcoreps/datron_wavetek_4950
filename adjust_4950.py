@@ -291,6 +291,6 @@ dmm.timeout = 150000
 logging.info("4950 configured")
 
         
-ohms()
+acv()
 
 
