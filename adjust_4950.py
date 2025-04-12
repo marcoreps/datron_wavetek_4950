@@ -60,13 +60,13 @@ def dcv():
 
 def acv():
     while 1:
-        str_input = input("connect the cable for ACV 4W adjustments, and then input: go\n")
+        str_input = input("connect the cable for ACV adjustments, and then input: go\n")
         if (str_input == 'go'):
             break
         else:
             print("input again")
 
-    dmm.write("ACV 1,FREQ_1k,PCENT_100,FWR")
+    dmm.write("ACV 1,FREQ_1k,PCENT_100")
     F5700EP.write("OUT 1 V, 1 KHz")
     F5700EP.write("OPER")
     logging.info("Thermal sensor warm up ...")
@@ -76,11 +76,11 @@ def acv():
         for freq in ["1 kHz","1 MHz","10 Hz","20 Hz","30 Hz","40 Hz","55 Hz","300 Hz","10 kHz","20 kHz","30 kHz","50 kHz","100 kHz","300 kHz","500 kHz"]:
             cutstr = freq.split(" ")
             if cutstr[1] == "Hz":
-                dmm.write("ACV "+str(v)+",FREQ_"+cutstr[0]+",PCENT_100,FWR")
+                dmm.write("ACV "+str(v)+",FREQ_"+cutstr[0]+",PCENT_100")
             elif cutstr[1] == "kHz":
-                  dmm.write("ACV "+str(v)+",FREQ_"+cutstr[0]+"k,PCENT_100,FWR")
+                  dmm.write("ACV "+str(v)+",FREQ_"+cutstr[0]+"k,PCENT_100")
             elif cutstr[1] == "MHz":
-                  dmm.write("ACV "+str(v)+",FREQ_"+cutstr[0]+"M,PCENT_100,FWR")
+                  dmm.write("ACV "+str(v)+",FREQ_"+cutstr[0]+"M,PCENT_100")
             F5700EP.write("OUT "+str(v)+" V, "+freq)
             F5700EP.write("OPER")
             logging.info("Cal ACV "+str(v)+" V, "+freq)
@@ -89,7 +89,7 @@ def acv():
                 logging.error("Error")
                 finish()
             if v == 10 and freq == "1 kHz":
-                dmm.write("ACV 10,FREQ_1k,PCENT_190,FWR")
+                dmm.write("ACV 10,FREQ_1k,PCENT_190")
                 F5700EP.write("OUT 19 V, 1 kHz")
                 logging.info("Cal ACV  19 V, 1 kHz")
                 time.sleep(settling_time)
@@ -101,11 +101,11 @@ def acv():
     for freq in ["1 kHz","200 kHz","10 Hz","20 Hz","30 Hz","40 Hz","55 Hz","300 Hz","10 kHz","20 kHz","30 kHz","50 kHz","100 kHz"]:
         cutstr = freq.split(" ")
         if cutstr[1] == "Hz":
-            dmm.write("ACV "+str(v)+",FREQ_"+cutstr[0]+",PCENT_100,FWR")
+            dmm.write("ACV "+str(v)+",FREQ_"+cutstr[0]+",PCENT_100")
         elif cutstr[1] == "kHz":
-              dmm.write("ACV "+str(v)+",FREQ_"+cutstr[0]+"k,PCENT_100,FWR")
+              dmm.write("ACV "+str(v)+",FREQ_"+cutstr[0]+"k,PCENT_100")
         elif cutstr[1] == "MHz":
-              dmm.write("ACV "+str(v)+",FREQ_"+cutstr[0]+"M,PCENT_100,FWR")
+              dmm.write("ACV "+str(v)+",FREQ_"+cutstr[0]+"M,PCENT_100")
         F5700EP.write("OUT "+str(v)+" V, "+freq)
         F5700EP.write("OPER")
         logging.info("Cal ACV "+str(v)+" V, "+freq)
@@ -118,9 +118,9 @@ def acv():
     for freq in ["1 kHz","10 Hz","20 Hz","30 Hz","40 Hz","55 Hz","300 Hz"]:
         cutstr = freq.split(" ")
         if cutstr[1] == "Hz":
-            dmm.write("ACV "+str(v)+",FREQ_"+cutstr[0]+",PCENT_100,FWR")
+            dmm.write("ACV "+str(v)+",FREQ_"+cutstr[0]+",PCENT_100")
         elif cutstr[1] == "kHz":
-              dmm.write("ACV "+str(v)+",FREQ_"+cutstr[0]+"k,PCENT_100,FWR")
+              dmm.write("ACV "+str(v)+",FREQ_"+cutstr[0]+"k,PCENT_100")
         F5700EP.write("OUT "+str(v)+" V, "+freq)
         F5700EP.write("OPER")
         logging.info("Cal ACV "+str(v)+" V, "+freq)
