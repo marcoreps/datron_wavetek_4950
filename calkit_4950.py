@@ -668,17 +668,6 @@ F5700EP.write("STBY")
 
 #F5700EP.close()
 
-
-#########################
-#ACV FWR
-while 1:
-    str_input = input("connect the cable for ACV FWR, and then input: go\n")
-    if (str_input == 'go'):
-        break
-    else:
-        print("input again")
-#########################
-   
 ########## ACV PERFORMANCE TEST ##########
 print("ACV PERFORMANCE TEST")
 ACV_LIN_list = ["1 V,1 KHz","2 V, 1 KHz","5 V, 1 KHz","10 V, 1 KHz","12 V, 1 KHz","15 V, 1 KHz","19 V, 1 KHz"]
@@ -686,7 +675,7 @@ ACV_LIN_list = ["1 V,1 KHz","2 V, 1 KHz","5 V, 1 KHz","10 V, 1 KHz","12 V, 1 KHz
 
 #dmm = rm.open_resource('GPIB0::9::INSTR')
 dmm.timeout = None 
-dmm.write("ACV 10,FREQ_1k,PCENT_100,FWR,LCL_GUARD")
+dmm.write("ACV 10,FREQ_1k,PCENT_100,LCL_GUARD")
 #dmm.close()
 #F5700EP = rm.open_resource('GPIB0::1::INSTR')
 
@@ -767,7 +756,7 @@ ACV_list = ["0.001 V, 10 Hz","0.001 V, 20 Hz","0.001 V, 30 Hz","0.001 V, 40 Hz",
 #dmm = rm.open_resource('GPIB0::9::INSTR')
 dmm.timeout = None 
 
-dmm.write("ACV 10,FREQ_1k,PCENT_100,FWR,LCL_GUARD")
+dmm.write("ACV 10,FREQ_1k,PCENT_100,LCL_GUARD")
 for ix in range (0,112):
     #dmm = rm.open_resource('GPIB0::9::INSTR')
     dmm.timeout = None 
@@ -784,13 +773,13 @@ for ix in range (0,112):
     else:
         pcent = "PCENT_100"
     if cutstr[3] == "Hz":
-        dmm.write("ACV %s,FREQ_%s,%s,FWR,LCL_GUARD" %(cutstr[0],cutstr[2],pcent))
+        dmm.write("ACV %s,FREQ_%s,%s,LCL_GUARD" %(cutstr[0],cutstr[2],pcent))
     elif cutstr[3] == "KHz":
-        dmm.write("ACV %s,FREQ_%sk,%s,FWR,LCL_GUARD" %(cutstr[0],cutstr[2],pcent))
+        dmm.write("ACV %s,FREQ_%sk,%s,LCL_GUARD" %(cutstr[0],cutstr[2],pcent))
     elif cutstr[3] == "MHz":
-        dmm.write("ACV %s,FREQ_%sM,%s,FWR,LCL_GUARD" %(cutstr[0],cutstr[2],pcent))
+        dmm.write("ACV %s,FREQ_%sM,%s,LCL_GUARD" %(cutstr[0],cutstr[2],pcent))
     else:
-        dmm.write("ACV 1000,FREQ_1k,PCENT_100,FWR,LCL_GUARD")
+        dmm.write("ACV 1000,FREQ_1k,PCENT_100,LCL_GUARD")
     #dmm.close()
     #F5700EP = rm.open_resource('GPIB0::1::INSTR')
     

@@ -115,14 +115,12 @@ def acv():
             finish()
             
     v = 1000
-    for freq in ["1 kHz","30 kHz","10 Hz","20 Hz","30 Hz","40 Hz","55 Hz","300 Hz","10 kHz","20 kHz"]:
+    for freq in ["1 kHz","10 Hz","20 Hz","30 Hz","40 Hz","55 Hz","300 Hz"]:
         cutstr = freq.split(" ")
         if cutstr[1] == "Hz":
             dmm.write("ACV "+str(v)+",FREQ_"+cutstr[0]+",PCENT_100,FWR")
         elif cutstr[1] == "kHz":
               dmm.write("ACV "+str(v)+",FREQ_"+cutstr[0]+"k,PCENT_100,FWR")
-        elif cutstr[1] == "MHz":
-              dmm.write("ACV "+str(v)+",FREQ_"+cutstr[0]+"M,PCENT_100,FWR")
         F5700EP.write("OUT "+str(v)+" V, "+freq)
         F5700EP.write("OPER")
         logging.info("Cal ACV "+str(v)+" V, "+freq)
@@ -131,21 +129,6 @@ def acv():
         else:
             time.sleep(settling_time)
         if(dmm.query("CAL?") != '0\n'):
-            logging.error("Error")
-            finish()
-            
-    v = 700
-    for freq in ["50 kHz","100 kHz"]:
-        cutstr = freq.split(" ")
-        dmm.write("ACV "+str(v)+",FREQ_"+cutstr[0]+"k,PCENT_100,FWR")
-        F5700EP.write("OUT "+str(v)+" V, "+freq)
-        F5700EP.write("OPER")
-        logging.info("Cal ACV "+str(v)+" V, "+freq)
-        if freq == "50 kHz":
-            time.sleep(600)
-        else:
-            time.sleep(settling_time)
-        if(dmm.query("CAL? 700") != '0\n'):
             logging.error("Error")
             finish()
 
