@@ -115,7 +115,7 @@ def acv():
             finish()
             
     v = 1000
-    for freq in ["1 kHz","10 Hz","20 Hz","30 Hz","40 Hz","55 Hz","300 Hz"]:
+    for freq in ["1 kHz","55 Hz","300 Hz"]:
         cutstr = freq.split(" ")
         if cutstr[1] == "Hz":
             dmm.write("ACV "+str(v)+",FREQ_"+cutstr[0]+",PCENT_100")
